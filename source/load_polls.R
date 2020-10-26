@@ -36,10 +36,11 @@ for(ii in 1:length(states[,2])){
 
 # polling agency names
 agencies = unlist(sapply(polldata, function(x) x[,1]))
-# print(sort(table(agencies),decreasing=T)[1:15])
 
-# Only consider pollsters with greater than 3 polls:
-pollsters = names(table(agencies)[table(agencies) > 5])
+# Only consider pollsters working across multiple states
+agency_st_count = table(unlist(sapply(polldata, function(x) levels(x[,1]))))
+
+pollsters = names(agency_st_count[agency_st_count > 1])
 print(pollsters)
 
 maxpoll = max(sapply(polldata,nrow))
@@ -85,8 +86,8 @@ print(data.frame(states=paste(states[,2]), n_polls=Nmax))
 national_dat = read.table(paste(data_path, "/polls_", year, "/national_2020_poll.dat", sep=""),
                                     sep=",", header=TRUE)
 
-# Use 30 latest polls:
-national_dat = national_dat[1:30,]
+# Use 15 latest polls:
+national_dat = national_dat[1:15,]
 
 # Prop of voters for Dem, plus size of poll for each poll:
 Pdem.nat = national_dat$Democrat / (national_dat$Democrat + national_dat$Republican)

@@ -9,7 +9,7 @@ source(paste(path,"/load_polls.R",sep=""))
 source(paste(path,"/load_prior.R",sep=""))
 
 # if there's no polls, reduce the prior variance (non-battleground states)
-p0.var[p0.var > 0.0001 & Nmax==0] = 0.0001
+p0.var[p0.var > 0.0002 & Nmax==0] = 0.0002
 # else add 0.01 to the std:
 #p0.var[Nmax>0] = p0.var[Nmax>0] + 0.01^2
 
@@ -48,7 +48,7 @@ model {
    Pdem.nat[m] ~ dnorm(mu, 1/(mu*(1-mu)/N.nat[m]))
 }
  # prior for national level parameter
- mu ~ dnorm(0.5, 1/0.005^2)
+ mu ~ dnorm(0.5, 1/0.01^2)
 
 }" 
 
