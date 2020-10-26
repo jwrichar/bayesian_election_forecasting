@@ -4,6 +4,10 @@ data_path = normalizePath("../data")
 ####################################
 ## GENERATE PLOTS OF THE RESULTS
 
+cat("Plotting results:\n")
+cat("Posterior mean for National vote proportion to Biden: ", 100*mean(muSamp), "% \n")
+cat("Posterior mean for National vote spread (D): ", 100 * (mean(muSamp) - (1 - mean(muSamp))), "% \n")
+
 ######################
 # plot of posterior mean proportion & CI versus (ordered state)
 ind = order(statemean)
@@ -56,7 +60,7 @@ evotes = read.table(paste(data_path,"/electoral_college.dat",sep=""),
 
 dem.win = (stateSamp > 0.5)
 
-dem.evotes = demwin %*% evotes[,2] # electoral votes
+dem.evotes = dem.win %*% evotes[,2] # electoral votes
 evotesMat = cbind(as.numeric(names(table(dem.evotes))), table(dem.evotes))
 
 
@@ -83,7 +87,7 @@ library(maps)
 dem.probstate = apply(dem.win, 2, mean)
 
 ##### CLOSEST STATE:
-cat("Closest State:", state.abbrs[which.min(abs(dem.probstate-0.5))],"\n")
+cat("Closest State:", paste(state.abbrs[which.min(abs(dem.probstate-0.5))]),"\n")
 
 
 statenames.all = tolower(c(state.name[1:47],"District of Columbia",

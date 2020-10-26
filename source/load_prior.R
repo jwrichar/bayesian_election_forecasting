@@ -1,14 +1,4 @@
-data_path = normalizePath("../data")
-
-states = read.table(paste(data_path, "/state_abbreviations.txt", sep=""), header=FALSE)
-state.abbrs = states[,2]
-
 print("Loading historical election data to generate priors")
-
-#########################################
-## load data from last 4 elections as prior data
-
-elec.years = c(2016, 2012, 2008, 2004, 2000)
 
 past.results = read.table(
     paste(data_path, "/statewise-results-1976-2016-president.csv", sep=""),
@@ -18,9 +8,9 @@ past.results = past.results[past.results$party %in% c("democrat", "republican"),
 past.results = past.results[past.results$writein == FALSE,]
 
 # Get prop of D/R voteshare that went to Demorat, for each state:
-dem.voteshare = matrix(nrow = 51, ncol = length(elec.years),
-    dimnames = list(state.abbrs, elec.years))
-for(year in elec.years){
+dem.voteshare = matrix(nrow = 51, ncol = length(past_elec_years),
+    dimnames = list(state.abbrs, past_elec_years))
+for(year in past_elec_years){
     for(state in state.abbrs){
         res = past.results[(past.results$year == year) & (past.results$state_po == state),]
         demvotes = res$candidatevotes[res$party == 'democrat']

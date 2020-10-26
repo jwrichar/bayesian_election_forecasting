@@ -1,8 +1,3 @@
-# TO SET FOR EACH ELECTION:
-year = 2020
-elecday = as.POSIXlt("2020-11-03")
-
-data_path = normalizePath("../data")
 
 print(paste("Loading all polls from election year ", year))
 
@@ -11,9 +6,6 @@ print(paste("Loading all polls from election year ", year))
 
 # Get list of files in the polls_2008 dir
 files = list.files(paste(data_path, "/polls_", year, sep=""))
-
-# Get state abbreviations
-states = read.table(paste(data_path, "/state_abbreviations.txt", sep=""), header=FALSE)
 
 # Initialize polling data object
 polldata = list()
@@ -68,7 +60,7 @@ for(jj in 1:length(states[,2])){
           polls_state_j$Democrat[kk] + polls_state_j$Republican[kk])
         polldate = strptime(
           strsplit(paste(polls_state_j$Date[kk]), " - ")[[1]][2], "%m/%d")
-        days2elec[jj,nn] = elecday$yday - polldate$yday
+        days2elec[jj,nn] = election_day$yday - polldate$yday
       }
     }
   }
@@ -86,8 +78,8 @@ print(data.frame(states=paste(states[,2]), n_polls=Nmax))
 national_dat = read.table(paste(data_path, "/polls_", year, "/national_2020_poll.dat", sep=""),
                                     sep=",", header=TRUE)
 
-# Use 15 latest polls:
-national_dat = national_dat[1:15,]
+# Use only latest polls:
+national_dat = national_dat[1:n_latest_national_polls,]
 
 # Prop of voters for Dem, plus size of poll for each poll:
 Pdem.nat = national_dat$Democrat / (national_dat$Democrat + national_dat$Republican)

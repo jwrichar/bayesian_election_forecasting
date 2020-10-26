@@ -5,13 +5,12 @@ library(rjags)
 # THE DATA.
 
 # source all of the data:
+source(paste(path,"/constants.R",sep=""))
 source(paste(path,"/load_polls.R",sep=""))
 source(paste(path,"/load_prior.R",sep=""))
 
 # if there's no polls, reduce the prior variance (non-battleground states)
 p0.var[p0.var > 0.0002 & Nmax==0] = 0.0002
-# else add 0.01 to the std:
-#p0.var[Nmax>0] = p0.var[Nmax>0] + 0.01^2
 
 # Specify the data in R, using a list format 
 # compatible with JAGS:
@@ -35,7 +34,7 @@ model {
      theta[i] ~ dnorm(p0mean[i], 1/p0var[i])
         for ( j in 1:Npolls[i]){
           Pdem[i,j] ~ dnorm(mu + theta[i] + del[pollster[i,j]],
-            1/((mu + theta[i] + del[pollster[i,j]])*(1-mu - theta[i] - del[pollster[i,j]])/N[i,j] +
+            1/((mu + theta[i] + del[pollster[i,j]])*(1 - mu - theta[i] - del[pollster[i,j]])/N[i,j] +
             0.0002*Ndays[i,j]/30))T(0,1)
      }
    }
@@ -48,7 +47,7 @@ model {
    Pdem.nat[m] ~ dnorm(mu, 1/(mu*(1-mu)/N.nat[m]))
 }
  # prior for national level parameter
- mu ~ dnorm(0.5, 1/0.01^2)
+ mu ~ dnorm(0.5, 1/0.005^2)
 
 }" 
 
@@ -63,20 +62,20 @@ parameters = c("theta" , "del", "mu") # parameters to be monitored.
 # This line creates, initialize, and adapt the model:
 jagsModel = jags.model("election_model.txt" ,
                        data=dataList,
-                       n.chains=5,
-                       n.adapt=200)
+                       n.chains=n_chains,
+                       n.adapt=n_adapt)
 
 # Burn-in (until convergence):
 cat("Burning in the MCMC chain...\n")
 update(jagsModel,
-       n.iter=2000)
+       n.iter=n_burnin)
 
 # Now sample the saved MCMC chain:
 cat("Sampling final MCMC chain...\n")
 codaSamples = coda.samples(jagsModel ,
                            variable.names=parameters, 
-                           n.iter=10000,
-                           thin=1)
+                           n.iter=n_iter,
+                           thin=thin)
 
 
 ##########################################
