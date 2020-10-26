@@ -20,6 +20,7 @@ def load_and_write_all_polls(year):
 
     master_table = _get_rcp_master_table()
 
+    # State-level polls
     for abbr in STATE_ABBREVS:
 
         print('Getting polls for state %s' % abbr)
@@ -39,6 +40,19 @@ def load_and_write_all_polls(year):
 
         data.to_csv('%s/polls_%s/%s_%s_poll.dat' % (
             data_path, year, abbr, year), index=False)
+
+    # National polls for general election:
+    print("Getting national level polls")
+    nat_poll_url = _get_national_poll_url(year, master_table)
+
+    http = urllib3.PoolManager()
+    html_doc = http.request('GET', nat_poll_url)
+    page = BeautifulSoup(html_doc.data, features="lxml")
+
+    data = _all_state_data_to_df(page)
+
+    data.to_csv('%s/polls_%s/national_%s_poll.dat' % (
+        data_path, year, year), index=False)
 
 
 # Private functions:
@@ -62,6 +76,22 @@ def _get_state_poll_url(abbr, year, master_table):
     start = master_table.find('epolls/%s/president/%s' % (year, abbr))
     if(start == -1):
         print('No polls found for %s, skipping.' % abbr)
+        return ''
+
+    end = start + master_table[start::].find("html") + 4
+
+    url = "http://www.realclearpolitics.com/%s%s" % \
+        (master_table[start:end], '#polls')
+    return url
+
+
+def _get_national_poll_url(year, master_table):
+    ''' Get URL to national-level poll '''
+
+    # Find URL string
+    start = master_table.find('epolls/%s/president/us/general_election' % year)
+    if(start == -1):
+        print('No national polls found, skipping.')
         return ''
 
     end = start + master_table[start::].find("html") + 4
