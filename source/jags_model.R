@@ -9,8 +9,8 @@ source(paste(path,"/constants.R",sep=""))
 source(paste(path,"/load_polls.R",sep=""))
 source(paste(path,"/load_prior.R",sep=""))
 
-# if there's no polls, reduce the prior variance (non-battleground states)
-p0.var[p0.var > 0.0002 & Nmax==0] = 0.0002
+# if there's few or no polls, reduce the prior variance (non-battleground states)
+p0.var[p0.var > 0.0002 & Nmax<3] = 0.0002
 
 # Specify the data in R, using a list format 
 # compatible with JAGS:
@@ -25,22 +25,24 @@ dataList = list(
 
 ###########################################
 # THE MODEL
-       
+
+# Note: JAGS uses precision (1 / variance) for dnorm spread parameter
+
 modelString = "
 model {
-# Likelihood:
+# Likelihood for state-level polls:
   for ( i in 1:51 ) {
      # prior for state i
      theta[i] ~ dnorm(p0mean[i], 1/p0var[i])
         for ( j in 1:Npolls[i]){
           Pdem[i,j] ~ dnorm(mu + theta[i] + del[pollster[i,j]],
-            1/((mu + theta[i] + del[pollster[i,j]])*(1 - mu - theta[i] - del[pollster[i,j]])/N[i,j] +
-            0.0002*Ndays[i,j]/30))T(0,1)
+            1 / ((mu + theta[i] + del[pollster[i,j]])*(1 - mu - theta[i] - del[pollster[i,j]])/N[i,j] +
+            0.02^2*Ndays[i,j]/30 + 0.05^2))T(0,1)
      }
    }
  # prior on pollster-level data
  for ( k in 1:N_pollsters){
-   del[k] ~ dnorm(0,1/0.002)
+   del[k] ~ dnorm(0,1/0.01^2)
 }
  # likelihood of national level data
  for(m in 1:M){ # number of national polls used

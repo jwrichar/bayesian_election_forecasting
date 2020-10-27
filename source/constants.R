@@ -10,7 +10,7 @@ election_day = as.POSIXlt("2020-11-03")
 
 ##########################################
 # MCMC Parameters
-n_chains = 5
+n_chains = 3
 n_adapt = 200
 n_burnin = 200
 n_iter = 10000

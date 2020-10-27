@@ -27,6 +27,8 @@ legend('bottomright', c("Posterior","Prior (historical)"), col=c(1,2),
        pch=c(20,1),cex=1.5,bg='white')
 dev.off()
 
+cat("Average confidence interval length: ", mean(state975 - state025), "\n")
+
 ######################
 # plot of house effect
 ind = order(delmean)
@@ -126,9 +128,11 @@ transparency[nchar(transparency)==1] =
 # paste transparency to red/blue color vector!
 col.dem.t = paste(col.dem,transparency,sep="")
 
-# plot map with transparent colors for 2008 election result
+# plot map with transparent colors for predicted election result
 pdf(paste(plots_path,"/electoral_map.pdf",sep=""),height=8,width=10)
-map("state",col=col.dem.t,fill=TRUE)
+map("state", col=col.dem.t, fill=TRUE)
+title(paste("Predicted 2020 US Presidential Election Outcome. Biden Electoral Votes: ",
+  median(dem.evotes), sep=""))
 text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10')
 dev.off()
 

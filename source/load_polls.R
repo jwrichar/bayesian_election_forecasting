@@ -48,19 +48,25 @@ for(jj in 1:length(states[,2])){
   nn = 0
   polls_state_j = polldata[tolower(tolower(states[jj, 2]))][[1]]
 
-  if(length(polls_state_j)>0){
+  if(length(polls_state_j) > 0){
 
     for(kk in 1:nrow(polls_state_j)){
+      # Use only polls matching approved pollster list
       pollsterind = pmatch(pollsters, paste(polls_state_j$Name[kk]))
+      polldate = strptime(
+          strsplit(paste(polls_state_j$Date[kk]), " - ")[[1]][2], "%m/%d")
+      num_days_to_elec = election_day$yday - polldate$yday
+      # Polls are reverse-ordered by date (but don't have year specified!)
+      # once we reach 9 months from election, don't add any more polls:
+      if(num_days_to_elec > 270){break}
+
       if(sum(pollsterind,na.rm=TRUE)>0){
         nn = nn + 1
         pollster[jj,nn] = which(is.na(pollsterind)==FALSE)
         N[jj,nn] = polls_state_j$Size[kk]
         Pdem[jj,nn] = polls_state_j$Democrat[kk] / (
           polls_state_j$Democrat[kk] + polls_state_j$Republican[kk])
-        polldate = strptime(
-          strsplit(paste(polls_state_j$Date[kk]), " - ")[[1]][2], "%m/%d")
-        days2elec[jj,nn] = election_day$yday - polldate$yday
+        days2elec[jj,nn] = num_days_to_elec
       }
     }
   }
