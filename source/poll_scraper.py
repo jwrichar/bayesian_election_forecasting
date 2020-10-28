@@ -1,4 +1,5 @@
 import os
+import pathlib
 import urllib3
 
 from bs4 import BeautifulSoup
@@ -7,7 +8,8 @@ import pandas as pd
 
 urllib3.disable_warnings()
 
-data_path = os.path.abspath('../data')
+file_path = pathlib.Path(__file__).parent.absolute()
+data_path = os.path.abspath('%s/../data' % file_path)
 
 STATE_ABBREVS = np.loadtxt(
     os.path.join(data_path,
