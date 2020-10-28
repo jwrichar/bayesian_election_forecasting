@@ -81,7 +81,7 @@ print(data.frame(states=paste(states[,2]), n_polls=Nmax))
 
 
 ######### NATIONAL POLLS 
-national_dat = read.table(paste(data_path, "/polls_", year, "/national_2020_poll.dat", sep=""),
+national_dat = read.table(paste(data_path, "/polls_", year, "/national_", year, "_poll.dat", sep=""),
                                     sep=",", header=TRUE)
 
 # Use only latest polls:

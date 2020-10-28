@@ -10,16 +10,16 @@ past.results = past.results[past.results$writein == FALSE,]
 # Get prop of D/R voteshare that went to Demorat, for each state:
 dem.voteshare = matrix(nrow = 51, ncol = length(past_elec_years),
     dimnames = list(state.abbrs, past_elec_years))
-for(year in past_elec_years){
+for(past_year in past_elec_years){
     for(state in state.abbrs){
-        res = past.results[(past.results$year == year) & (past.results$state_po == state),]
+        res = past.results[(past.results$year == past_year) & (past.results$state_po == state),]
         demvotes = res$candidatevotes[res$party == 'democrat']
         repvotes = res$candidatevotes[res$party == 'republican']
         # handle missing data (make it 50%):
         if(length(demvotes) == 0){
             demvotes = repvotes
         }
-        dem.voteshare[state, paste(year)] = demvotes / (demvotes + repvotes)
+        dem.voteshare[state, paste(past_year)] = demvotes / (demvotes + repvotes)
     }
 }
 
