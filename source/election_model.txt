@@ -1,0 +1,24 @@
+
+model {
+# Likelihood for state-level polls:
+  for ( i in 1:51 ) {
+     # prior for state i
+     theta[i] ~ dnorm(p0mean[i], 1/p0var[i])
+        for ( j in 1:Npolls[i]){
+          Pdem[i,j] ~ dnorm(mu + theta[i] + del[pollster[i,j]],
+            1 / ((mu + theta[i] + del[pollster[i,j]])*(1 - mu - theta[i] - del[pollster[i,j]])/N[i,j] +
+            0.02^2*Ndays[i,j]/30 + 0.05^2))T(0,1)
+     }
+   }
+ # prior on pollster-level data
+ for ( k in 1:N_pollsters){
+   del[k] ~ dnorm(0,1/0.01^2)
+}
+ # likelihood of national level data
+ for(m in 1:M){ # number of national polls used
+   Pdem.nat[m] ~ dnorm(mu, 1/(mu*(1-mu)/N.nat[m]))
+}
+ # prior for national level parameter
+ mu ~ dnorm(0.5, 1/0.005^2)
+
+}

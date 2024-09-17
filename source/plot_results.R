@@ -137,6 +137,57 @@ text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10
 dev.off()
 
 
+for(adjustment in c(0.02, 0.04)){
+
+  stateSamp.adj = stateSamp - adjustment
+
+  dem.win = (stateSamp.adj > 0.5)
+
+  dem.evotes = dem.win %*% evotes[,2] # electoral votes
+
+  # P(Obama win) for each state:
+  dem.probstate = apply(dem.win, 2, mean)
+
+  # allocate colors to each polygon in the U.S.
+  PDem = NULL
+  for(ii in statevec){
+    ind = which(statenames.all==ii)
+    PDem = c(PDem,dem.probstate[ind])
+  }
+
+  # make color vector to plot
+  col.dem = rep(NA,length(PDem))
+  col.dem[PDem>=0.5] = "#0000FF" # blue states
+  col.dem[PDem<0.5] = "#FF0000" # red states
+
+  ###  add transparency
+
+  margin = abs(PDem - 0.5)
+
+  # define amount of transparency based on margin of victory
+  transparency = ceiling((margin**3 - min(margin**3))/(max(margin**3)-min(margin**3)) *100)
+  transparency[transparency > 99] = 99
+
+  # set transparency vector as two-digit string
+  transparency = paste(transparency)
+  transparency[nchar(transparency)==1] = 
+    paste("0", transparency[nchar(transparency)==1],sep="")
+
+  # paste transparency to red/blue color vector!
+  col.dem.t = paste(col.dem,transparency,sep="")
+
+  # plot map with transparent colors for predicted election result
+  pdf(paste(plots_path,"/electoral_map_", year, "_adjustment", adjustment, ".pdf",sep=""),height=8,width=10)
+  map("state", col=col.dem.t, fill=TRUE)
+  title(paste("Predicted 2020 US Presidential Election Outcome w/ adjustment: ", adjustment,
+    ". Biden Electoral Votes: ", median(dem.evotes), sep=""))
+  text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10')
+  dev.off()
+
+
+}
+
+
 ######
 ## write table of statewise results
 voteprop = data.frame(cbind(state.abbrs,statemean,state025,state975))
