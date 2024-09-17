@@ -4,8 +4,8 @@ data_path = normalizePath("../data")
 
 ##########################################
 # Basic data for election model:
-year = 2020
-election_day = as.POSIXlt("2020-11-03")
+year = 2024
+election_day = as.POSIXlt("2024-11-05")
 
 
 ##########################################
@@ -20,9 +20,9 @@ thin = 1
 ##########################################
 # Priors
 # Which past elec years to use for state-wise priors:
-past_elec_years = c(2016, 2012, 2008, 2004)
+past_elec_years = c(2020, 2016, 2012, 2008, 2004)
 # How many national polls to use for modeling:
-n_latest_national_polls = 15
+n_latest_national_polls = 25
 
 
 ##########################################
