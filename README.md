@@ -22,17 +22,12 @@ The model fitting is performed with Markov Chain Monte Carlo routines from the `
 
 ### To pull the most recent polling data:
 
-NOTE: RCP has changed its website dramatically for the 2024 cycle, breaking the poll scraping code. We now recommend that you download a CSV of all polls from 538.com:
+NOTE: RCP has changed its website dramatically for the 2024 cycle, breaking the poll scraping code. We now recommend that you use the option `data_source='538'`:
 
-    https://projects.fivethirtyeight.com/polls/data/president_polls.csv
-
-**Depricated as of 2024:**
-
-To pull all the polls for 2020, run the following in Python:
+To pull all the polls for 2024, run the following in Python:
 
     from source.poll_scraper import load_and_write_all_polls
-    load_and_write_all_polls(2020)    
-
+    load_and_write_all_polls(2024, data_source='538', local_data=False)
 
 ### To run a model:
 

@@ -1,3 +1,4 @@
+import json
 import os
 import pathlib
 import urllib3
@@ -15,6 +16,10 @@ STATES = np.loadtxt(
     os.path.join(data_path, 'state_abbreviations.txt'),
     dtype=np.str)
 STATE_ABBREVS = STATES[:,1]
+
+with open(os.path.join(data_path, 'candidates.json'), 'r') as f:
+    CANDIDATES = json.load(f)
+
 
 def load_and_write_all_polls(year, data_source='538', local_data=False):
     ''' Load and write all state-wise polling data for year 
@@ -49,9 +54,26 @@ def load_and_write_all_polls(year, data_source='538', local_data=False):
         # Parse out and write state-level polls:
         for state in STATES:
 
-            print('Writing polls for state %s' % state[1])
+            print('Getting polls for state: %s.' % state[1])
 
-            _write_state_polls_538(master_data, state[0])
+            data_state = _get_state_poll_538(year, master_data, state[0])
+
+            if not data_state:
+                print('No polls for state %s. Skipping.' % state[1])
+                continue
+
+            print('Writing %i polls for state %s.' % (len(data_state), state[1]))
+
+            data_state.to_csv('%s/polls_%s/%s_%s_poll.dat' % (
+                data_path, year, state[1].lower(), year), index=False)
+
+        # National polls for general election:
+        print("Getting national level polls.")
+
+        data_national = _get_state_poll_538(year, master_data, 'national')
+
+        data_national.to_csv('%s/polls_%s/national_%s_poll.dat' % (
+            data_path, year, year), index=False)
 
 
     elif data_source == 'rcp':
@@ -88,11 +110,74 @@ def load_and_write_all_polls(year, data_source='538', local_data=False):
 
         data = _all_state_data_to_df(page)
 
-    data.to_csv('%s/polls_%s/national_%s_poll.dat' % (
-        data_path, year, year), index=False)
+        data.to_csv('%s/polls_%s/national_%s_poll.dat' % (
+            data_path, year, year), index=False)
+
+    else:
+        print('Valid data sources are "538" or "rcp". You chose %s.' % data_source)
 
 
 # Private functions:
+
+def _get_state_poll_538(year, data, state_name):
+    ''' Subselect to polls from a specific state and
+    retrieve only the summary data, e.g.:
+    
+    Name,Date,Republican,Democrat,Size
+    NY Times/Siena,10/9 - 10/14,45.0,39.0,423
+
+    Passing state_name = "national" compiles all national
+    level polls.
+    '''
+    candidates = set(CANDIDATES[str(year)])
+
+    if state_name == 'national':
+        print('Compiling all national level polls.')
+        data_state = data.loc[data['state'].isnull()]
+    else:
+        data_state = data.loc[data['state'] == state_name]
+
+    # Initialize all data fields:
+    poll_names = []
+    poll_dates = []
+    dem_perc = []
+    rep_perc = []
+    poll_sizes = []
+
+    for poll_question in data_state['question_id'].unique():
+        # Data for a single poll are multi-row, one entry per
+        # candidate per question.
+        data_poll = data_state.loc[data_state['question_id'] == poll_question]
+
+        if len(candidates & set(data_poll['answer'])) != len(candidates):
+            # Poll does not include all candidates for given year, skip.
+            continue
+
+        dem_entry = data_poll.loc[data_poll['party'] == 'DEM'].iloc[0]
+        rep_entry = data_poll.loc[data_poll['party'] == 'REP'].iloc[0]
+
+        # Append poll info to lists:
+        poll_names.append(dem_entry['pollster'])
+
+        poll_dates.append(
+            "%s - %s" % (
+                dem_entry['start_date'].strftime('%-m/%d'),
+                dem_entry['end_date'].strftime('%-m/%d')
+            )
+        )
+        rep_perc.append(float(rep_entry['pct']))
+        dem_perc.append(float(dem_entry['pct']))
+        poll_sizes.append(int(dem_entry['sample_size']))
+
+    if not poll_names:
+        return None
+
+    data = pd.DataFrame(list(
+        zip(poll_names, poll_dates, rep_perc, dem_perc, poll_sizes)),
+        columns=['Name', 'Date', 'Republican', 'Democrat', 'Size'])
+
+    return data
+
 
 def _get_rcp_master_table():
     ''' Read RCP latest_polls html table. '''
