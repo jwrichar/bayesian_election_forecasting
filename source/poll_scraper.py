@@ -34,6 +34,7 @@ def load_and_write_all_polls(year, data_source='538', local_data=False):
     :return: None. Write all data to files in data/polls_{year}/
     '''
 
+    # Use the pre-compiled CSV data from fivethirtyeight.com:
     if data_source == '538':
         # Load all polls for the current cycle:
         data_url = 'https://projects.fivethirtyeight.com/polls/data/president_polls.csv'
@@ -55,10 +56,11 @@ def load_and_write_all_polls(year, data_source='538', local_data=False):
         for state in STATES:
 
             print('Getting polls for state: %s.' % state[1])
+            state_name = state[0].replace('-', ' ')
 
-            data_state = _get_state_poll_538(year, master_data, state[0])
+            data_state = _get_state_poll_538(year, master_data, state_name)
 
-            if not data_state:
+            if data_state is None:
                 print('No polls for state %s. Skipping.' % state[1])
                 continue
 
@@ -76,6 +78,7 @@ def load_and_write_all_polls(year, data_source='538', local_data=False):
             data_path, year, year), index=False)
 
 
+    # Scrape the RCP website:
     elif data_source == 'rcp':
         master_table = _get_rcp_master_table()
 
@@ -152,6 +155,10 @@ def _get_state_poll_538(year, data, state_name):
         if len(candidates & set(data_poll['answer'])) != len(candidates):
             # Poll does not include all candidates for given year, skip.
             continue
+
+        if data_poll['sample_size'].notnull().sum() == 0:
+            # Sample sizes are missing, skip.
+            continue 
 
         dem_entry = data_poll.loc[data_poll['party'] == 'DEM'].iloc[0]
         rep_entry = data_poll.loc[data_poll['party'] == 'REP'].iloc[0]
