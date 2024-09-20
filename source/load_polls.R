@@ -30,8 +30,7 @@ for(ii in 1:length(states[,2])){
 agencies = unlist(sapply(polldata, function(x) x[,1]))
 
 # Only consider pollsters working across multiple states
-agency_st_count = table(unlist(sapply(polldata, function(x) levels(x[,1]))))
-
+agency_st_count = table(unlist(sapply(polldata, function(x) x[,1])))
 pollsters = names(agency_st_count[agency_st_count > 1])
 print(pollsters)
 

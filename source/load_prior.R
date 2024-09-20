@@ -1,10 +1,10 @@
 print("Loading historical election data to generate priors")
 
 past.results = read.table(
-    paste(data_path, "/statewise-results-1976-2016-president.csv", sep=""),
+    paste(data_path, "/1976-2020-president.csv", sep=""),
     sep=",", header=TRUE)
 
-past.results = past.results[past.results$party %in% c("democrat", "republican"),]
+past.results = past.results[past.results$party_detailed %in% c("DEMOCRAT", "REPUBLICAN"),]
 past.results = past.results[past.results$writein == FALSE,]
 
 # Get prop of D/R voteshare that went to Demorat, for each state:
@@ -13,8 +13,8 @@ dem.voteshare = matrix(nrow = 51, ncol = length(past_elec_years),
 for(past_year in past_elec_years){
     for(state in state.abbrs){
         res = past.results[(past.results$year == past_year) & (past.results$state_po == state),]
-        demvotes = res$candidatevotes[res$party == 'democrat']
-        repvotes = res$candidatevotes[res$party == 'republican']
+        demvotes = res$candidatevotes[res$party_detailed == 'DEMOCRAT']
+        repvotes = res$candidatevotes[res$party_detailed == 'REPUBLICAN']
         # handle missing data (make it 50%):
         if(length(demvotes) == 0){
             demvotes = repvotes
