@@ -5,7 +5,7 @@ data_path = normalizePath("../data")
 ## GENERATE PLOTS OF THE RESULTS
 
 cat("Plotting results:\n")
-cat("Posterior mean for National vote proportion to Biden: ", 100*mean(muSamp), "% \n")
+cat("Posterior mean for National vote proportion to Harris: ", 100*mean(muSamp), "% \n")
 cat("Posterior mean for National vote spread (D): ", 100 * (mean(muSamp) - (1 - mean(muSamp))), "% \n")
 
 ######################
@@ -15,7 +15,7 @@ ind = order(statemean)
 pdf(paste(plots_path,"/statewise_proportions_", year, ".pdf",sep=""),height=10,width=8)
 par(mar=c(4,6,1,1))
 plot(statemean[ind],1:51, pch=20, axes=FALSE, ylab="",
-     xlab="Proportion of vote to Biden",xlim=c(0.2,0.95))
+     xlab="Proportion of vote to Harris",xlim=c(0.2,0.95))
 arrows(state025[ind], 1:51, state975[ind], 1:51, length=0,lwd=2)
 points(p0.mean[ind] + 0.5, 1:51, col=2,pch=1)
 box()
@@ -33,8 +33,8 @@ cat("Average confidence interval length: ", mean(state975 - state025), "\n")
 # plot of house effect
 ind = order(delmean)
 
-pdf(paste(plots_path,"/pollster_bias_", year, ".pdf",sep=""),height=10,width=12)
-par(mar=c(4,10,1,1))
+pdf(paste(plots_path,"/pollster_bias_", year, ".pdf",sep=""),height=18,width=12)
+par(mar=c(4,15,1,1))
 plot(delmean[ind],1:dataList$N_pollsters, pch=19, axes=FALSE, ylab="",
      xlab="Democratic Bias of Pollster",xlim=c(-0.05,0.05))
 arrows(del025[ind], 1:dataList$N_pollsters, del975[ind], 1:dataList$N_pollsters,
@@ -68,17 +68,17 @@ evotesMat = cbind(as.numeric(names(table(dem.evotes))), table(dem.evotes))
 
 pdf(paste(plots_path,"/electoral_votes_", year, ".pdf",sep=""),height=7,width=8)
 plot(evotesMat[evotesMat[,1]>=270,1],evotesMat[evotesMat[,1]>=270,2]/sum(evotesMat[,2]),
-     typ='h',lwd=4,xlab="Electoral Votes for Biden",ylab="Probability",col=4,
+     typ='h',lwd=4,xlab="Electoral Votes for Harris",ylab="Probability",col=4,
      xlim=range(evotesMat[,1]))
 lines(evotesMat[evotesMat[,1]<270,1],evotesMat[evotesMat[,1]<270,2]/sum(evotesMat[,2]),
      typ='h',lwd=4,col=2)
 dev.off()
 
 #### Posterior mode Evotes:
-cat("Posterior Mode Biden Electoral Votes:",evotesMat[which.max(evotesMat[,2]),1],"\n")
+cat("Posterior Mode Harris Electoral Votes:",evotesMat[which.max(evotesMat[,2]),1],"\n")
 
-#### PROBABILITY THAT OBAMA WINS
-cat("P(Biden Win) = ", mean(dem.evotes >= 270),"\n")
+#### PROBABILITY THAT DEMOCRAT WINS
+cat("P(Harris Win) = ", mean(dem.evotes >= 270),"\n")
 
 
 ############
@@ -131,7 +131,7 @@ col.dem.t = paste(col.dem,transparency,sep="")
 # plot map with transparent colors for predicted election result
 pdf(paste(plots_path,"/electoral_map_", year, ".pdf",sep=""),height=8,width=10)
 map("state", col=col.dem.t, fill=TRUE)
-title(paste("Predicted 2020 US Presidential Election Outcome. Biden Electoral Votes: ",
+title(paste("Predicted 2024 US Presidential Election Outcome. Harris Electoral Votes: ",
   median(dem.evotes), sep=""))
 text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10')
 dev.off()
@@ -179,8 +179,8 @@ for(adjustment in c(0.02, 0.04)){
   # plot map with transparent colors for predicted election result
   pdf(paste(plots_path,"/electoral_map_", year, "_adjustment", adjustment, ".pdf",sep=""),height=8,width=10)
   map("state", col=col.dem.t, fill=TRUE)
-  title(paste("Predicted 2020 US Presidential Election Outcome w/ adjustment: ", adjustment,
-    ". Biden Electoral Votes: ", median(dem.evotes), sep=""))
+  title(paste("Predicted 2024 US Presidential Election Outcome w/ adjustment: ", adjustment,
+    ". Harris Electoral Votes: ", median(dem.evotes), sep=""))
   text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10')
   dev.off()
 

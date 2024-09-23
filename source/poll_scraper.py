@@ -1,3 +1,4 @@
+import json
 import os
 import pathlib
 import urllib3
@@ -11,53 +12,179 @@ urllib3.disable_warnings()
 file_path = pathlib.Path(__file__).parent.absolute()
 data_path = os.path.abspath('%s/../data' % file_path)
 
-STATE_ABBREVS = np.loadtxt(
-    os.path.join(data_path,
-                 'state_abbreviations.txt'),
-    usecols=(1, ), dtype=np.str)
+STATES = np.loadtxt(
+    os.path.join(data_path, 'state_abbreviations.txt'),
+    dtype=np.str)
+STATE_ABBREVS = STATES[:,1]
+
+with open(os.path.join(data_path, 'candidates.json'), 'r') as f:
+    CANDIDATES = json.load(f)
 
 
-def load_and_write_all_polls(year):
-    ''' Load and write all state-wise polling data for year '''
+def load_and_write_all_polls(year, data_source='538', local_data=False):
+    ''' Load and write all state-wise polling data for year 
 
-    master_table = _get_rcp_master_table()
+    :param year: int, year of the election.
+    :param data_source: str, either '538' or 'rcp'
+        (Note: 'rcp' is deprecated as of 2024 due to changes
+        in their website and data schema).
+    :param local_data: bool, load master data file from data/ (True) or
+        load from web (False).
 
-    # State-level polls
-    for abbr in STATE_ABBREVS:
+    :return: None. Write all data to files in data/polls_{year}/
+    '''
 
-        print('Getting polls for state %s' % abbr)
+    # Use the pre-compiled CSV data from fivethirtyeight.com:
+    if data_source == '538':
+        # Load all polls for the current cycle:
+        data_url = 'https://projects.fivethirtyeight.com/polls/data/president_polls.csv'
+        data_path_local = os.path.join(data_path, 'polls_%s/president_polls_all.csv' % year)
+        if local_data:
+            master_data = pd.read_csv(data_path_local,
+                parse_dates = ['start_date', 'end_date'])
+        else:
+            master_data = pd.read_csv(data_url,
+                parse_dates = ['start_date', 'end_date'])
+            master_data.to_csv(data_path_local, index=False)
 
-        abbr = abbr.lower()
+        # Only use polls from current year:
+        is_current_year = (master_data['end_date'].apply(lambda x: x.year) == year)
+        master_data.query("@is_current_year",
+            inplace=True)
 
-        poll_url = _get_state_poll_url(abbr, year, master_table)
+        # Parse out and write state-level polls:
+        for state in STATES:
 
-        if not poll_url:
-            continue
+            print('Getting polls for state: %s.' % state[1])
+            state_name = state[0].replace('-', ' ')
+
+            data_state = _get_state_poll_538(year, master_data, state_name)
+
+            if data_state is None:
+                print('No polls for state %s. Skipping.' % state[1])
+                continue
+
+            print('Writing %i polls for state %s.' % (len(data_state), state[1]))
+
+            data_state.to_csv('%s/polls_%s/%s_%s_poll.dat' % (
+                data_path, year, state[1].lower(), year), index=False)
+
+        # National polls for general election:
+        print("Getting national level polls.")
+
+        data_national = _get_state_poll_538(year, master_data, 'national')
+
+        data_national.to_csv('%s/polls_%s/national_%s_poll.dat' % (
+            data_path, year, year), index=False)
+
+
+    # Scrape the RCP website:
+    elif data_source == 'rcp':
+        master_table = _get_rcp_master_table()
+
+        # State-level polls
+        for abbr in STATE_ABBREVS:
+
+            print('Getting polls for state %s' % abbr)
+
+            abbr = abbr.lower()
+
+            poll_url = _get_state_poll_url(abbr, year, master_table)
+
+            if not poll_url:
+                continue
+
+            http = urllib3.PoolManager()
+            html_doc = http.request('GET', poll_url)
+            page = BeautifulSoup(html_doc.data, features="lxml")
+
+            data = _all_state_data_to_df(page)
+
+            data.to_csv('%s/polls_%s/%s_%s_poll.dat' % (
+                data_path, year, abbr, year), index=False)
+
+        # National polls for general election:
+        print("Getting national level polls")
+        nat_poll_url = _get_national_poll_url(year, master_table)
 
         http = urllib3.PoolManager()
-        html_doc = http.request('GET', poll_url)
+        html_doc = http.request('GET', nat_poll_url)
         page = BeautifulSoup(html_doc.data, features="lxml")
 
         data = _all_state_data_to_df(page)
 
-        data.to_csv('%s/polls_%s/%s_%s_poll.dat' % (
-            data_path, year, abbr, year), index=False)
+        data.to_csv('%s/polls_%s/national_%s_poll.dat' % (
+            data_path, year, year), index=False)
 
-    # National polls for general election:
-    print("Getting national level polls")
-    nat_poll_url = _get_national_poll_url(year, master_table)
-
-    http = urllib3.PoolManager()
-    html_doc = http.request('GET', nat_poll_url)
-    page = BeautifulSoup(html_doc.data, features="lxml")
-
-    data = _all_state_data_to_df(page)
-
-    data.to_csv('%s/polls_%s/national_%s_poll.dat' % (
-        data_path, year, year), index=False)
+    else:
+        print('Valid data sources are "538" or "rcp". You chose %s.' % data_source)
 
 
 # Private functions:
+
+def _get_state_poll_538(year, data, state_name):
+    ''' Subselect to polls from a specific state and
+    retrieve only the summary data, e.g.:
+    
+    Name,Date,Republican,Democrat,Size
+    NY Times/Siena,10/9 - 10/14,45.0,39.0,423
+
+    Passing state_name = "national" compiles all national
+    level polls.
+    '''
+    candidates = set(CANDIDATES[str(year)])
+
+    if state_name == 'national':
+        print('Compiling all national level polls.')
+        data_state = data.loc[data['state'].isnull()]
+    else:
+        data_state = data.loc[data['state'] == state_name]
+
+    # Initialize all data fields:
+    poll_names = []
+    poll_dates = []
+    dem_perc = []
+    rep_perc = []
+    poll_sizes = []
+
+    for poll_question in data_state['question_id'].unique():
+        # Data for a single poll are multi-row, one entry per
+        # candidate per question.
+        data_poll = data_state.loc[data_state['question_id'] == poll_question]
+
+        if len(candidates & set(data_poll['answer'])) != len(candidates):
+            # Poll does not include all candidates for given year, skip.
+            continue
+
+        if data_poll['sample_size'].notnull().sum() == 0:
+            # Sample sizes are missing, skip.
+            continue 
+
+        dem_entry = data_poll.loc[data_poll['party'] == 'DEM'].iloc[0]
+        rep_entry = data_poll.loc[data_poll['party'] == 'REP'].iloc[0]
+
+        # Append poll info to lists:
+        poll_names.append(dem_entry['pollster'])
+
+        poll_dates.append(
+            "%s - %s" % (
+                dem_entry['start_date'].strftime('%-m/%d'),
+                dem_entry['end_date'].strftime('%-m/%d')
+            )
+        )
+        rep_perc.append(float(rep_entry['pct']))
+        dem_perc.append(float(dem_entry['pct']))
+        poll_sizes.append(int(dem_entry['sample_size']))
+
+    if not poll_names:
+        return None
+
+    data = pd.DataFrame(list(
+        zip(poll_names, poll_dates, rep_perc, dem_perc, poll_sizes)),
+        columns=['Name', 'Date', 'Republican', 'Democrat', 'Size'])
+
+    return data
+
 
 def _get_rcp_master_table():
     ''' Read RCP latest_polls html table. '''
