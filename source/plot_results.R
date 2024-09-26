@@ -195,5 +195,7 @@ colnames(voteprop) = c("state","mean","2.5quant", "97.5quant")
 write.table(voteprop,paste(plots_path,"/table_voteprop_", year, ".dat",sep=""),
             quote=FALSE,sep=",",row.names=FALSE)
 
-# write out all posterior samples
+# write out all state-level posterior samples
 write(t(stateSamp),paste(plots_path,"/samples_stateVote_", year, ".dat",sep=""),ncolumns=51)
+# write all samples for national head-to-head vote prop to Dem
+write(t(muSamp),paste(plots_path,"/samples_nationalVote_", year, ".dat",sep=""),ncolumns=1)

@@ -10,7 +10,7 @@ source(paste(path,"/load_polls.R",sep=""))
 source(paste(path,"/load_prior.R",sep=""))
 
 # if there's few or no polls, reduce the prior variance (non-battleground states)
-p0.var[p0.var > 0.0002 & Nmax<3] = 0.0002
+p0.var[p0.var > 0.0002 & Nmax<2] = 0.0002
 
 # Specify the data in R, using a list format 
 # compatible with JAGS:
