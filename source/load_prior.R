@@ -26,7 +26,7 @@ for(past_year in past_elec_years){
 
 # Prior mean and variance based on previous elections, and centered to 0.5
 # Do a weighted mean, weighting more recent elections more heavily
-weights = seq(length(past_elec_years), 1)
+weights = seq(length(past_elec_years), 1)^2
 p0.mean = apply(dem.voteshare - 0.5, 1, weighted.mean, w=weights)
 p0.var = apply(dem.voteshare, 1, var)
 

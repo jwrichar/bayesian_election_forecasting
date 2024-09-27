@@ -145,7 +145,7 @@ for(adjustment in c(0.02, 0.04)){
 
   dem.evotes = dem.win %*% evotes[,2] # electoral votes
 
-  # P(Obama win) for each state:
+  # P(Dem win) for each state:
   dem.probstate = apply(dem.win, 2, mean)
 
   # allocate colors to each polygon in the U.S.
