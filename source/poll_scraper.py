@@ -147,6 +147,8 @@ def _get_state_poll_538(year, data, state_name):
     rep_perc = []
     poll_sizes = []
 
+    last_pollster = None
+    last_dates = None
     for poll_question in data_state['question_id'].unique():
         # Data for a single poll are multi-row, one entry per
         # candidate per question.
@@ -163,22 +165,32 @@ def _get_state_poll_538(year, data, state_name):
         dem_entry = data_poll.loc[data_poll['party'] == 'DEM'].iloc[0]
         rep_entry = data_poll.loc[data_poll['party'] == 'REP'].iloc[0]
 
-        # Append poll info to lists:
-        poll_names.append(dem_entry['pollster'])
-
-        poll_dates.append(
-            "%s - %s" % (
+        pollster = dem_entry['pollster']
+        dates = "%s - %s" % (
                 dem_entry['start_date'].strftime('%-m/%d'),
                 dem_entry['end_date'].strftime('%-m/%d')
             )
-        )
+
+        # Filter out polls with multiple questions, taking only the first
+        # answer (to avoid swamping the polling with repetitive data).
+        if ((pollster == last_pollster) & (dates == last_dates)):
+            continue
+
+        # Append poll info to lists:
+        poll_names.append(pollster)
+        poll_dates.append(dates)
         rep_perc.append(float(rep_entry['pct']))
         dem_perc.append(float(dem_entry['pct']))
         poll_sizes.append(int(dem_entry['sample_size']))
 
+        last_pollster = pollster
+        last_dates = dates
+
+    # If no polls for this state, return None
     if not poll_names:
         return None
 
+    # Compile all poll data into a df
     data = pd.DataFrame(list(
         zip(poll_names, poll_dates, rep_perc, dem_perc, poll_sizes)),
         columns=['Name', 'Date', 'Republican', 'Democrat', 'Size'])
