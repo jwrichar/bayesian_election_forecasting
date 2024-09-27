@@ -82,10 +82,10 @@ cat("P(Harris Win) = ", mean(dem.evotes >= 270),"\n")
 
 
 ############
-# MAP of P(Obama win) in each state
+# MAP of P(Dem win) in each state
 library(maps)
 
-# P(Obama win) for each state:
+# P(Dem win) for each state:
 dem.probstate = apply(dem.win, 2, mean)
 
 ##### CLOSEST STATE:
@@ -136,8 +136,8 @@ title(paste("Predicted 2024 US Presidential Election Outcome. Harris Electoral V
 text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10')
 dev.off()
 
-
-for(adjustment in c(0.02, 0.04)){
+### Draw maps for a 1% and 2% avg. polling bias
+for(adjustment in c(0.01, 0.02)){
 
   stateSamp.adj = stateSamp - adjustment
 
@@ -184,8 +184,25 @@ for(adjustment in c(0.02, 0.04)){
   text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10')
   dev.off()
 
-
 }
+
+# Probability of Dem win as a function of poll bias
+biases = seq(0, .02, by=0.001)
+dem.win.probs = NULL
+for(bias in biases){
+
+  stateSamp.adj = stateSamp - bias
+  dem.win = (stateSamp.adj > 0.5)
+  dem.evotes = dem.win %*% evotes[,2] # electoral votes
+
+  dem.win.probs = c(dem.win.probs, mean(dem.evotes >= 270))
+}
+pdf(paste(plots_path,"/prob_dem_win_vs_bias", year, ".pdf",sep=""),height=6,width=8)
+par(mar=c(4,6,1,1))
+plot(biases*100,dem.win.probs*100, pch=10, ylab="Probability Democrat Wins EC",
+     xlab="Amount of Democratic Bias in Polls", type='b')
+abline(h=50,col=4,lty=2,lwd=2)
+dev.off()
 
 
 ######
