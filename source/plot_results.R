@@ -132,7 +132,7 @@ col.dem.t = paste(col.dem,transparency,sep="")
 pdf(paste(plots_path,"/electoral_map_", year, ".pdf",sep=""),height=8,width=10)
 map("state", col=col.dem.t, fill=TRUE)
 title(paste("Predicted 2024 US Presidential Election Outcome. Harris Electoral Votes: ",
-  median(dem.evotes), sep=""))
+  evotesMat[which.max(evotesMat[,2]),1], sep=""))
 text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10')
 dev.off()
 
