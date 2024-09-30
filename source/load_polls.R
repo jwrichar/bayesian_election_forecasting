@@ -29,9 +29,10 @@ for(ii in 1:length(states[,2])){
 # polling agency names
 agencies = unlist(sapply(polldata, function(x) x[,1]))
 
-# Only consider pollsters working across multiple states
+# Use all pollsters (not just working across multiple states)
+# Gives more robust forecast due to some pollsters only working in one state
 agency_st_count = table(unlist(sapply(polldata, function(x) x[,1])))
-pollsters = names(agency_st_count[agency_st_count > 1])
+pollsters = names(agency_st_count)
 print(pollsters)
 
 maxpoll = max(sapply(polldata,nrow))

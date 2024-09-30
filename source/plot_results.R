@@ -82,10 +82,10 @@ cat("P(Harris Win) = ", mean(dem.evotes >= 270),"\n")
 
 
 ############
-# MAP of P(Obama win) in each state
+# MAP of P(Dem win) in each state
 library(maps)
 
-# P(Obama win) for each state:
+# P(Dem win) for each state:
 dem.probstate = apply(dem.win, 2, mean)
 
 ##### CLOSEST STATE:
@@ -132,12 +132,12 @@ col.dem.t = paste(col.dem,transparency,sep="")
 pdf(paste(plots_path,"/electoral_map_", year, ".pdf",sep=""),height=8,width=10)
 map("state", col=col.dem.t, fill=TRUE)
 title(paste("Predicted 2024 US Presidential Election Outcome. Harris Electoral Votes: ",
-  median(dem.evotes), sep=""))
+  evotesMat[which.max(evotesMat[,2]),1], sep=""))
 text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10')
 dev.off()
 
-
-for(adjustment in c(0.02, 0.04)){
+### Draw maps for a 1% and 2% avg. polling bias
+for(adjustment in c(0.01, 0.02)){
 
   stateSamp.adj = stateSamp - adjustment
 
@@ -145,7 +145,7 @@ for(adjustment in c(0.02, 0.04)){
 
   dem.evotes = dem.win %*% evotes[,2] # electoral votes
 
-  # P(Obama win) for each state:
+  # P(Dem win) for each state:
   dem.probstate = apply(dem.win, 2, mean)
 
   # allocate colors to each polygon in the U.S.
@@ -184,8 +184,25 @@ for(adjustment in c(0.02, 0.04)){
   text(state.center$x, state.center$y, round(dem.probstate[-48]*100,1),col='gray10')
   dev.off()
 
-
 }
+
+# Probability of Dem win as a function of poll bias
+biases = seq(0, .02, by=0.001)
+dem.win.probs = NULL
+for(bias in biases){
+
+  stateSamp.adj = stateSamp - bias
+  dem.win = (stateSamp.adj > 0.5)
+  dem.evotes = dem.win %*% evotes[,2] # electoral votes
+
+  dem.win.probs = c(dem.win.probs, mean(dem.evotes >= 270))
+}
+pdf(paste(plots_path,"/prob_dem_win_vs_bias", year, ".pdf",sep=""),height=6,width=8)
+par(mar=c(4,6,1,1))
+plot(biases*100,dem.win.probs*100, pch=10, ylab="Probability Democrat Wins EC",
+     xlab="Amount of Democratic Bias in Polls", type='b')
+abline(h=50,col=4,lty=2,lwd=2)
+dev.off()
 
 
 ######
@@ -195,5 +212,7 @@ colnames(voteprop) = c("state","mean","2.5quant", "97.5quant")
 write.table(voteprop,paste(plots_path,"/table_voteprop_", year, ".dat",sep=""),
             quote=FALSE,sep=",",row.names=FALSE)
 
-# write out all posterior samples
+# write out all state-level posterior samples
 write(t(stateSamp),paste(plots_path,"/samples_stateVote_", year, ".dat",sep=""),ncolumns=51)
+# write all samples for national head-to-head vote prop to Dem
+write(t(muSamp),paste(plots_path,"/samples_nationalVote_", year, ".dat",sep=""),ncolumns=1)

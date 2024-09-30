@@ -22,7 +22,7 @@ thin = 1
 # Which past elec years to use for state-wise priors:
 past_elec_years = c(2020, 2016, 2012, 2008, 2004)
 # How many national polls to use for modeling:
-n_latest_national_polls = 25
+n_latest_national_polls = 50
 
 
 ##########################################
