@@ -1,5 +1,7 @@
 print("Loading historical election data to generate priors")
 
+plots_path = normalizePath("../plots")
+
 past.results = read.table(
     paste(data_path, "/1976-2020-president.csv", sep=""),
     sep=",", header=TRUE)
