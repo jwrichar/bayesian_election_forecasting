@@ -1,14 +1,19 @@
 Name,Date,Republican,Democrat,Size
+co/efficient,10/06 - 10/08,47.0,49.0,2180
+ActiVote,10/03 - 10/08,50.6,49.4,1000
+YouGov,10/06 - 10/07,44.0,47.0,1414
 Ipsos,10/04 - 10/07,38.0,42.0,1272
-Redfield & Wilton Strategies,10/06 - 10/06,46.0,48.0,1918
+Redfield & Wilton Strategies,10/06 - 10/06,45.99,47.72,1918
 Research Co.,10/04 - 10/06,45.0,49.0,1001
 Morning Consult,10/04 - 10/06,46.0,51.0,11353
+Pew,9/30 - 10/06,47.0,48.0,4025
 Siena/NYT,9/29 - 10/06,46.0,49.0,3385
 Morning Consult,10/03 - 10/05,45.0,51.0,10844
 TIPP,10/02 - 10/04,46.0,49.0,997
 YouGov,10/02 - 10/04,45.0,46.0,1150
 Big Village,10/02 - 10/04,41.5,44.5,1013
 Morning Consult,10/02 - 10/04,45.0,51.0,10454
+Noble Predictive Insights,10/02 - 10/04,46.0,49.0,2290
 Data for Progress,10/02 - 10/03,46.0,49.0,1211
 Cygnal,10/02 - 10/03,44.5,47.2,1500
 Morning Consult,10/01 - 10/03,45.0,50.0,10775
@@ -54,6 +59,7 @@ Florida Atlantic University/Mainstreet Research,9/16 - 9/17,45.0,49.0,820
 YouGov,9/15 - 9/17,45.0,49.0,1445
 Morning Consult,9/15 - 9/17,45.0,50.0,10968
 Hart/POS,9/13 - 9/17,44.0,49.0,1000
+Data for Progress,9/12 - 9/17,45.0,50.0,6152
 ActiVote,9/11 - 9/17,47.3,52.7,1000
 HarrisX,9/14 - 9/16,49.0,51.0,1505
 Morning Consult,9/14 - 9/16,45.0,50.0,11092
