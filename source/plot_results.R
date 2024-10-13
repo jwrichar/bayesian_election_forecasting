@@ -33,15 +33,15 @@ cat("Average confidence interval length: ", mean(state975 - state025), "\n")
 # plot of house effect
 ind = order(delmean)
 
-pdf(paste(plots_path,"/pollster_bias_", year, ".pdf",sep=""),height=18,width=12)
-par(mar=c(4,15,1,1))
+pdf(paste(plots_path,"/pollster_bias_", year, ".pdf",sep=""),height=24,width=12)
+par(mar=c(4,18,1,1))
 plot(delmean[ind],1:dataList$N_pollsters, pch=19, axes=FALSE, ylab="",
      xlab="Democratic Bias of Pollster",xlim=c(-0.05,0.05))
 arrows(del025[ind], 1:dataList$N_pollsters, del975[ind], 1:dataList$N_pollsters,
        length=0,lwd=3)
 box()
 axis(1)
-axis(2, at=1:dataList$N_pollsters,labels=pollsters[ind],las=1,cex.axis=1.1)
+axis(2, at=1:dataList$N_pollsters,labels=pollsters[ind],las=1,cex.axis=1)
 abline(h=1:dataList$N_pollsters, col='#80808040')
 abline(v=0,col=4,lty=2,lwd=2)
 dev.off()
