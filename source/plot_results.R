@@ -32,16 +32,24 @@ cat("Average confidence interval length: ", mean(state975 - state025), "\n")
 ######################
 # plot of house effect
 ind = order(delmean)
+library(jsonlite)
+pollster_lean = fromJSON(paste(data_path, '/pollster_lean.json', sep=""))
+ind_dem = pollsters[ind] %in% pollster_lean$DEM
+ind_rep = pollsters[ind] %in% pollster_lean$REP
 
 pdf(paste(plots_path,"/pollster_bias_", year, ".pdf",sep=""),height=24,width=12)
 par(mar=c(4,18,1,1))
-plot(delmean[ind],1:dataList$N_pollsters, pch=19, axes=FALSE, ylab="",
-     xlab="Democratic Bias of Pollster",xlim=c(-0.05,0.05))
-arrows(del025[ind], 1:dataList$N_pollsters, del975[ind], 1:dataList$N_pollsters,
+plot(100*delmean[ind],1:dataList$N_pollsters, pch=19, axes=FALSE, ylab="",
+     xlab="Democratic Bias of Pollster", xlim=c(-4,4))
+arrows(100*del025[ind], 1:dataList$N_pollsters, 100*del975[ind], 1:dataList$N_pollsters,
        length=0,lwd=3)
 box()
 axis(1)
-axis(2, at=1:dataList$N_pollsters,labels=pollsters[ind],las=1,cex.axis=1)
+axis(2, at=1:dataList$N_pollsters,labels=pollsters[ind], las=1,cex.axis=1)
+axis(2, at=(1:dataList$N_pollsters)[ind_dem],
+  labels=pollsters[ind][ind_dem], las=1, cex.axis=1, col.axis="blue")
+axis(2, at=(1:dataList$N_pollsters)[ind_rep],
+  labels=pollsters[ind][ind_rep], las=1,cex.axis=1, col.axis="red")
 abline(h=1:dataList$N_pollsters, col='#80808040')
 abline(v=0,col=4,lty=2,lwd=2)
 dev.off()
