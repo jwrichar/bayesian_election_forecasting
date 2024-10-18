@@ -1,7 +1,7 @@
 plots_path = normalizePath("../plots")
 data_path = normalizePath("../data")
 
-dates = c('Oct 7', 'Oct 14')
+dates = c('Oct 7', 'Oct 17')
 
 date_old = gsub(' ', '',tolower(dates[1]))
 date_new = gsub(' ', '',tolower(dates[2]))
