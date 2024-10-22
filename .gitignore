@@ -1,6 +1,5 @@
 .DS_Store
 .Rhistory
-.RData
 .pyc
+.RData
 __pycache__/
-*.Rout
