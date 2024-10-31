@@ -1,0 +1,349 @@
+
+R version 4.4.1 (2024-06-14) -- "Race for Your Life"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> path = normalizePath(".")
+> library(rjags)
+Loading required package: coda
+Linked to JAGS 4.3.2
+Loaded modules: basemod,bugs
+> 
+> ##########################################
+> # THE DATA.
+> 
+> # source all of the data:
+> source(paste(path,"/constants.R",sep=""))
+> source(paste(path,"/load_polls.R",sep=""))
+[1] "Loading all polls from election year  2024"
+  [1] "ActiVote"                                         
+  [2] "Alaska Survey Research"                           
+  [3] "American Pulse"                                   
+  [4] "Arc Insights"                                     
+  [5] "ARW Strategies"                                   
+  [6] "AtlasIntel"                                       
+  [7] "Beacon/Shaw"                                      
+  [8] "Benenson Strategy Group/GS Strategy Group"        
+  [9] "BK Strategies"                                    
+ [10] "Bowling Green State University/YouGov"            
+ [11] "Bullfinch"                                        
+ [12] "Capitol Weekly"                                   
+ [13] "CES / YouGov"                                     
+ [14] "Change Research"                                  
+ [15] "Cherry Communications"                            
+ [16] "Christopher Newport U."                           
+ [17] "Civiqs"                                           
+ [18] "CNN/SSRS"                                         
+ [19] "co/efficient"                                     
+ [20] "CWS Research"                                     
+ [21] "Cygnal"                                           
+ [22] "Dartmouth Poll"                                   
+ [23] "Data Orbital"                                     
+ [24] "DHM Research"                                     
+ [25] "Digital Research"                                 
+ [26] "East Carolina University"                         
+ [27] "Elon U."                                          
+ [28] "Elway"                                            
+ [29] "Embold Research"                                  
+ [30] "Emerson"                                          
+ [31] "EPIC/MRA"                                         
+ [32] "Fabrizio"                                         
+ [33] "Fabrizio Ward"                                    
+ [34] "Fabrizio/David Binder Research"                   
+ [35] "Fabrizio/GBAO"                                    
+ [36] "Fabrizio/Impact"                                  
+ [37] "Fabrizio/McLaughlin"                              
+ [38] "Florida Atlantic University/Mainstreet Research"  
+ [39] "Focaldata"                                        
+ [40] "Fort Hays State University"                       
+ [41] "Franklin and Marshall College"                    
+ [42] "Glengariff Group Inc."                            
+ [43] "Global Strategy Group"                            
+ [44] "Global Strategy Group/North Star Opinion Research"
+ [45] "Gonzales Research & Media Services"               
+ [46] "GQR"                                              
+ [47] "HarrisX"                                          
+ [48] "Hendrix College"                                  
+ [49] "High Point University"                            
+ [50] "HighGround"                                       
+ [51] "Hoffman Research"                                 
+ [52] "Hunt Research"                                    
+ [53] "Impact Research"                                  
+ [54] "InsiderAdvantage"                                 
+ [55] "Iron Light"                                       
+ [56] "J.L. Partners"                                    
+ [57] "Keating Research"                                 
+ [58] "Lake Research"                                    
+ [59] "Landmark Communications"                          
+ [60] "Marist"                                           
+ [61] "Marquette Law School"                             
+ [62] "Mason-Dixon"                                      
+ [63] "MassINC Polling Group"                            
+ [64] "McLaughlin"                                       
+ [65] "Meredith College"                                 
+ [66] "Michigan State University/YouGov"                 
+ [67] "Mitchell"                                         
+ [68] "Monmouth"                                         
+ [69] "Morning Consult"                                  
+ [70] "MRG (Marketing Resource Group)"                   
+ [71] "MSU - Billings"                                   
+ [72] "Muhlenberg"                                       
+ [73] "National Research"                                
+ [74] "Navigator"                                        
+ [75] "Noble Predictive Insights"                        
+ [76] "North Star Opinion Research"                      
+ [77] "OnMessage Inc."                                   
+ [78] "Pan Atlantic Research"                            
+ [79] "Patriot Polling"                                  
+ [80] "Peak Insights"                                    
+ [81] "PPIC"                                             
+ [82] "PPP"                                              
+ [83] "Praecones Analytica"                              
+ [84] "Public Opinion Strategies"                        
+ [85] "Quantus Insights"                                 
+ [86] "Quantus Polls and News"                           
+ [87] "Quinnipiac"                                       
+ [88] "RABA Research"                                    
+ [89] "Redfield & Wilton Strategies"                     
+ [90] "Remington"                                        
+ [91] "Research & Polling"                               
+ [92] "Research America"                                 
+ [93] "Research Co."                                     
+ [94] "RG Strategies"                                    
+ [95] "RMG Research"                                     
+ [96] "Roanoke College"                                  
+ [97] "Rutgers-Eagleton"                                 
+ [98] "Selzer"                                           
+ [99] "Siena"                                            
+[100] "Siena/NYT"                                        
+[101] "Slingshot Strategies"                             
+[102] "SoCal Research"                                   
+[103] "SoCal Strategies"                                 
+[104] "SoonerPoll.com"                                   
+[105] "Spry Strategies"                                  
+[106] "St. Anselm"                                       
+[107] "St. Pete Polls"                                   
+[108] "Strategies 360"                                   
+[109] "Suffolk"                                          
+[110] "SurveyUSA"                                        
+[111] "SurveyUSA/High Point University"                  
+[112] "Susquehanna"                                      
+[113] "Targoz Market Research"                           
+[114] "Tarrance"                                         
+[115] "Texas Hispanic Policy Foundation"                 
+[116] "The Washington Post"                              
+[117] "TIPP"                                             
+[118] "Torchlight Strategies"                            
+[119] "Trafalgar Group"                                  
+[120] "U. Arizona/TrueDot"                               
+[121] "U. Georgia SPIA"                                  
+[122] "U. Houston"                                       
+[123] "U. New Hampshire"                                 
+[124] "U. North Florida"                                 
+[125] "U. Rhode Island"                                  
+[126] "UC Berkeley"                                      
+[127] "UMass Amherst/YouGov"                             
+[128] "UMBC"                                             
+[129] "University of Delaware"                           
+[130] "University of Houston/Texas Southern University"  
+[131] "University of Maryland/Washington Post"           
+[132] "University of Massachusetts Lowell/YouGov"        
+[133] "University of Texas at Tyler"                     
+[134] "USC Dornsife/CSU Long Beach/Cal Poly Pomona"      
+[135] "Victory Insights"                                 
+[136] "Virginia Commonwealth U."                         
+[137] "Washington Post/George Mason University"          
+[138] "Wick"                                             
+[139] "Winthrop U."                                      
+[140] "WPAi"                                             
+[141] "YouGov"                                           
+[142] "YouGov Blue"                                      
+[143] "YouGov/Center for Working Class Politics"         
+[144] "Z to A Research"                                  
+[1] "Number of valid polls for each state:\n"
+   states n_polls
+1      AL       0
+2      AK       5
+3      AZ      82
+4      AR       1
+5      CA      18
+6      CO       4
+7      CT       1
+8      DE       2
+9      FL      43
+10     GA      76
+11     HI       0
+12     ID       0
+13     IL       3
+14     IN       5
+15     IA       2
+16     KS       1
+17     KY       0
+18     LA       0
+19     ME       4
+20     MD      12
+21     MA       6
+22     MI      95
+23     MN      20
+24     MS       0
+25     MO       7
+26     MT       9
+27     NE      10
+28     NV      59
+29     NH      14
+30     NJ       4
+31     NM       9
+32     NY      10
+33     NC      84
+34     ND       2
+35     OH      20
+36     OK       4
+37     OR       2
+38     PA     120
+39     RI       4
+40     SC       4
+41     SD       2
+42     TN       4
+43     TX      30
+44     UT       4
+45     VT       1
+46     VA      20
+47     WA       9
+48     DC       0
+49     WV       1
+50     WI      89
+51     WY       0
+> source(paste(path,"/load_prior.R",sep=""))
+[1] "Loading historical election data to generate priors"
+> 
+> # if there's few or no polls, reduce the prior variance (non-battleground states)
+> p0.var[p0.var > 0.0002 & Nmax<2] = 0.0002
+> 
+> # Specify the data in R, using a list format 
+> # compatible with JAGS:
+> dataList = list(
++   p0mean = p0.mean, p0var = p0.var,
++   N = N, Pdem = Pdem, Npolls = Npolls,
++   Ndays = days2elec, pollster = pollster,
++   Pdem.nat = Pdem.nat, N.nat=N.nat,
++   M = length(N.nat),
++   N_pollsters = max(pollster, na.rm=TRUE)
++ )
+> 
+> ###########################################
+> # THE MODEL
+> 
+> # Note: JAGS uses precision (1 / variance) for dnorm spread parameter
+> 
+> modelString = "
++ model {
++ # Likelihood for state-level polls:
++   for ( i in 1:51 ) {
++      # prior for state i
++      theta[i] ~ dnorm(p0mean[i], 1/p0var[i])
++         for ( j in 1:Npolls[i]){
++           Pdem[i,j] ~ dnorm(mu + theta[i] + del[pollster[i,j]],
++             1 / ((mu + theta[i] + del[pollster[i,j]])*(1 - mu - theta[i] - del[pollster[i,j]])/N[i,j] +
++             0.02^2*Ndays[i,j]/30 + 0.05^2))T(0,1)
++      }
++    }
++  # prior on pollster-level data
++  for ( k in 1:N_pollsters){
++    del[k] ~ dnorm(0,1/0.01^2)
++ }
++  # likelihood of national level data
++  for(m in 1:M){ # number of national polls used
++    Pdem.nat[m] ~ dnorm(mu, 1/(mu*(1-mu)/N.nat[m]))
++ }
++  # prior for national level parameter
++  mu ~ dnorm(0.5, 1/0.005^2)
++ 
++ }" 
+> 
+> # Write the modelString to a file, using R commands:
+> writeLines(modelString, con="election_model.txt")
+> 
+> ##########################################
+> # RUN THE CHAINS.
+> 
+> parameters = c("theta" , "del", "mu") # parameters to be monitored.
+> 
+> # This line creates, initialize, and adapt the model:
+> jagsModel = jags.model("election_model.txt" ,
++                        data=dataList,
++                        n.chains=n_chains,
++                        n.adapt=n_adapt)
+Compiling model graph
+   Resolving undeclared variables
+   Allocating nodes
+Graph information:
+   Observed stochastic nodes: 952
+   Unobserved stochastic nodes: 196
+   Total graph size: 8522
+
+Initializing model
+
+> 
+> # Burn-in (until convergence):
+> cat("Burning in the MCMC chain...\n")
+Burning in the MCMC chain...
+> update(jagsModel,
++        n.iter=n_burnin)
+> 
+> # Now sample the saved MCMC chain:
+> cat("Sampling final MCMC chain...\n")
+Sampling final MCMC chain...
+> codaSamples = coda.samples(jagsModel ,
++                            variable.names=parameters, 
++                            n.iter=n_iter,
++                            thin=thin)
+> 
+> 
+> ##########################################
+> # EXAMINE THE RESULTS
+> 
+> #traceplot(codaSamples)
+> 
+> # posterior samples:
+> postSamp = as.matrix(codaSamples)
+> 
+> delSamp = postSamp[,1:dataList$N_pollsters]
+> muSamp = postSamp[,(dataList$N_pollsters + 1)]
+> stateSamp = postSamp[,(dataList$N_pollsters + 2):(dataList$N_pollsters + 52)] + muSamp
+> 
+> delmean = apply(delSamp,2,mean)
+> del025 = apply(delSamp,2,quantile,prob=0.025)
+> del975 = apply(delSamp,2,quantile,prob=0.975)
+> 
+> statemean = apply(stateSamp,2,mean)
+> state025 = apply(stateSamp,2,quantile,prob=0.025)
+> state975 = apply(stateSamp,2,quantile,prob=0.975)
+> 
+> source(paste(path,"/plot_results.R",sep=""))
+Plotting results:
+Posterior mean for National vote proportion to Harris:  51.64862 % 
+Posterior mean for National vote spread (D):  3.297248 % 
+Average confidence interval length:  0.06166319 
+Posterior Mode Harris Electoral Votes: 276 
+P(Harris Win) =  0.7851333 
+Closest State: NC 
+> 
+> proc.time()
+   user  system elapsed 
+ 85.655   5.551  92.294 
