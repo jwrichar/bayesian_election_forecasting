@@ -37,7 +37,7 @@ pollster_lean = fromJSON(paste(data_path, '/pollster_lean.json', sep=""))
 ind_dem = pollsters[ind] %in% pollster_lean$DEM
 ind_rep = pollsters[ind] %in% pollster_lean$REP
 
-pdf(paste(plots_path,"/pollster_bias_", year, ".pdf",sep=""),height=24,width=12)
+pdf(paste(plots_path,"/pollster_bias_", year, ".pdf",sep=""),height=28,width=12)
 par(mar=c(4,18,1,1))
 plot(100*delmean[ind],1:dataList$N_pollsters, pch=19, axes=FALSE, ylab="",
      xlab="Democratic Bias of Pollster", xlim=c(-4,4))

@@ -30,7 +30,7 @@ for(past_year in past_elec_years){
 # Do a weighted mean, weighting more recent elections more heavily
 weights = seq(length(past_elec_years), 1)^2
 p0.mean = apply(dem.voteshare - 0.5, 1, weighted.mean, w=weights)
-p0.var = apply(dem.voteshare, 1, var)
+p0.var = apply(dem.voteshare, 1, var) * 1.5
 
 
 pdf(paste(plots_path,"/statewise_priors_", year, ".pdf",sep=""),height=8,width=8)
