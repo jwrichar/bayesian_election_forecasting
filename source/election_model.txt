@@ -12,7 +12,7 @@ model {
    }
  # prior on pollster-level data
  for ( k in 1:N_pollsters){
-   del[k] ~ dnorm(0,1/0.05^2)
+   del[k] ~ dnorm(0,1/0.01^2)
 }
  # likelihood of national level data
  for(m in 1:M){ # number of national polls used

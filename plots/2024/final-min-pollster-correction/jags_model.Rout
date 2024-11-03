@@ -32,203 +32,213 @@ Loaded modules: basemod,bugs
 > source(paste(path,"/constants.R",sep=""))
 > source(paste(path,"/load_polls.R",sep=""))
 [1] "Loading all polls from election year  2024"
-  [1] "ActiVote"                                         
-  [2] "Alaska Survey Research"                           
-  [3] "American Pulse"                                   
-  [4] "Arc Insights"                                     
-  [5] "ARW Strategies"                                   
-  [6] "AtlasIntel"                                       
-  [7] "Beacon/Shaw"                                      
-  [8] "Benenson Strategy Group/GS Strategy Group"        
-  [9] "BK Strategies"                                    
- [10] "Bowling Green State University/YouGov"            
- [11] "Bullfinch"                                        
- [12] "Capitol Weekly"                                   
- [13] "CES / YouGov"                                     
- [14] "Change Research"                                  
- [15] "Cherry Communications"                            
- [16] "Christopher Newport U."                           
- [17] "Civiqs"                                           
- [18] "CNN/SSRS"                                         
- [19] "co/efficient"                                     
- [20] "CWS Research"                                     
- [21] "Cygnal"                                           
- [22] "Dartmouth Poll"                                   
- [23] "Data Orbital"                                     
- [24] "DHM Research"                                     
- [25] "Digital Research"                                 
- [26] "East Carolina University"                         
- [27] "Elon U."                                          
- [28] "Elway"                                            
- [29] "Embold Research"                                  
- [30] "Emerson"                                          
- [31] "EPIC/MRA"                                         
- [32] "Fabrizio"                                         
- [33] "Fabrizio Ward"                                    
- [34] "Fabrizio/David Binder Research"                   
- [35] "Fabrizio/GBAO"                                    
- [36] "Fabrizio/Impact"                                  
- [37] "Fabrizio/McLaughlin"                              
- [38] "Florida Atlantic University/Mainstreet Research"  
- [39] "Focaldata"                                        
- [40] "Fort Hays State University"                       
- [41] "Franklin and Marshall College"                    
- [42] "Glengariff Group Inc."                            
- [43] "Global Strategy Group"                            
- [44] "Global Strategy Group/North Star Opinion Research"
- [45] "Gonzales Research & Media Services"               
- [46] "GQR"                                              
- [47] "HarrisX"                                          
- [48] "Hendrix College"                                  
- [49] "High Point University"                            
- [50] "HighGround"                                       
- [51] "Hoffman Research"                                 
- [52] "Hunt Research"                                    
- [53] "Impact Research"                                  
- [54] "InsiderAdvantage"                                 
- [55] "Iron Light"                                       
- [56] "J.L. Partners"                                    
- [57] "Keating Research"                                 
- [58] "Lake Research"                                    
- [59] "Landmark Communications"                          
- [60] "Marist"                                           
- [61] "Marquette Law School"                             
- [62] "Mason-Dixon"                                      
- [63] "MassINC Polling Group"                            
- [64] "McLaughlin"                                       
- [65] "Meredith College"                                 
- [66] "Michigan State University/YouGov"                 
- [67] "Mitchell"                                         
- [68] "Monmouth"                                         
- [69] "Morning Consult"                                  
- [70] "MRG (Marketing Resource Group)"                   
- [71] "MSU - Billings"                                   
- [72] "Muhlenberg"                                       
- [73] "National Research"                                
- [74] "Navigator"                                        
- [75] "Noble Predictive Insights"                        
- [76] "North Star Opinion Research"                      
- [77] "OnMessage Inc."                                   
- [78] "Pan Atlantic Research"                            
- [79] "Patriot Polling"                                  
- [80] "Peak Insights"                                    
- [81] "PPIC"                                             
- [82] "PPP"                                              
- [83] "Praecones Analytica"                              
- [84] "Public Opinion Strategies"                        
- [85] "Quantus Insights"                                 
- [86] "Quantus Polls and News"                           
- [87] "Quinnipiac"                                       
- [88] "RABA Research"                                    
- [89] "Redfield & Wilton Strategies"                     
- [90] "Remington"                                        
- [91] "Research & Polling"                               
- [92] "Research America"                                 
- [93] "Research Co."                                     
- [94] "RG Strategies"                                    
- [95] "RMG Research"                                     
- [96] "Roanoke College"                                  
- [97] "Rutgers-Eagleton"                                 
- [98] "Selzer"                                           
- [99] "Siena"                                            
-[100] "Siena/NYT"                                        
-[101] "Slingshot Strategies"                             
-[102] "SoCal Research"                                   
-[103] "SoCal Strategies"                                 
-[104] "SoonerPoll.com"                                   
-[105] "Spry Strategies"                                  
-[106] "St. Anselm"                                       
-[107] "St. Pete Polls"                                   
-[108] "Strategies 360"                                   
-[109] "Suffolk"                                          
-[110] "SurveyUSA"                                        
-[111] "SurveyUSA/High Point University"                  
-[112] "Susquehanna"                                      
-[113] "Targoz Market Research"                           
-[114] "Tarrance"                                         
-[115] "Texas Hispanic Policy Foundation"                 
-[116] "The Washington Post"                              
-[117] "TIPP"                                             
-[118] "Torchlight Strategies"                            
-[119] "Trafalgar Group"                                  
-[120] "U. Arizona/TrueDot"                               
-[121] "U. Georgia SPIA"                                  
-[122] "U. Houston"                                       
-[123] "U. New Hampshire"                                 
-[124] "U. North Florida"                                 
-[125] "U. Rhode Island"                                  
-[126] "UC Berkeley"                                      
-[127] "UMass Amherst/YouGov"                             
-[128] "UMBC"                                             
-[129] "University of Delaware"                           
-[130] "University of Houston/Texas Southern University"  
-[131] "University of Maryland/Washington Post"           
-[132] "University of Massachusetts Lowell/YouGov"        
-[133] "University of Texas at Tyler"                     
-[134] "USC Dornsife/CSU Long Beach/Cal Poly Pomona"      
-[135] "Victory Insights"                                 
-[136] "Virginia Commonwealth U."                         
-[137] "Washington Post/George Mason University"          
-[138] "Wick"                                             
-[139] "Winthrop U."                                      
-[140] "WPAi"                                             
-[141] "YouGov"                                           
-[142] "YouGov Blue"                                      
-[143] "YouGov/Center for Working Class Politics"         
-[144] "Z to A Research"                                  
+  [1] "ActiVote"                                             
+  [2] "Alaska Survey Research"                               
+  [3] "American Pulse"                                       
+  [4] "Arc Insights"                                         
+  [5] "ARW Strategies"                                       
+  [6] "AtlasIntel"                                           
+  [7] "Beacon/Shaw"                                          
+  [8] "Benenson Strategy Group/GS Strategy Group"            
+  [9] "BK Strategies"                                        
+ [10] "Bowling Green State University/YouGov"                
+ [11] "Bullfinch"                                            
+ [12] "Capitol Weekly"                                       
+ [13] "CES / YouGov"                                         
+ [14] "Change Research"                                      
+ [15] "Cherry Communications"                                
+ [16] "Chism Strategies"                                     
+ [17] "Christopher Newport U."                               
+ [18] "Civiqs"                                               
+ [19] "Claflin University"                                   
+ [20] "CNN/SSRS"                                             
+ [21] "co/efficient"                                         
+ [22] "CWS Research"                                         
+ [23] "Cygnal"                                               
+ [24] "Dartmouth Poll"                                       
+ [25] "Data for Progress"                                    
+ [26] "Data Orbital"                                         
+ [27] "DHM Research"                                         
+ [28] "Digital Research"                                     
+ [29] "East Carolina University"                             
+ [30] "Echelon Insights"                                     
+ [31] "Elon U."                                              
+ [32] "Elway"                                                
+ [33] "Embold Research"                                      
+ [34] "Emerson"                                              
+ [35] "EPIC/MRA"                                             
+ [36] "Fabrizio"                                             
+ [37] "Fabrizio Ward"                                        
+ [38] "Fabrizio/David Binder Research"                       
+ [39] "Fabrizio/GBAO"                                        
+ [40] "Fabrizio/Impact"                                      
+ [41] "Fabrizio/McLaughlin"                                  
+ [42] "Florida Atlantic University/Mainstreet Research"      
+ [43] "Focaldata"                                            
+ [44] "Fort Hays State University"                           
+ [45] "Franklin and Marshall College"                        
+ [46] "Glengariff Group Inc."                                
+ [47] "Global Strategy Group"                                
+ [48] "Global Strategy Group/North Star Opinion Research"    
+ [49] "Gonzales Research & Media Services"                   
+ [50] "GQR"                                                  
+ [51] "HarrisX"                                              
+ [52] "Hendrix College"                                      
+ [53] "High Point University"                                
+ [54] "HighGround"                                           
+ [55] "Hoffman Research"                                     
+ [56] "Hunt Research"                                        
+ [57] "Impact Research"                                      
+ [58] "InsiderAdvantage"                                     
+ [59] "Iron Light"                                           
+ [60] "J.L. Partners"                                        
+ [61] "Keating Research"                                     
+ [62] "Lake Research"                                        
+ [63] "Landmark Communications"                              
+ [64] "Marist"                                               
+ [65] "Marquette Law School"                                 
+ [66] "Mason-Dixon"                                          
+ [67] "MassINC Polling Group"                                
+ [68] "McLaughlin"                                           
+ [69] "Meredith College"                                     
+ [70] "Miami University (Ohio)"                              
+ [71] "Michigan State University/YouGov"                     
+ [72] "Mitchell"                                             
+ [73] "Monmouth"                                             
+ [74] "Morning Consult"                                      
+ [75] "MRG (Marketing Resource Group)"                       
+ [76] "MSU - Billings"                                       
+ [77] "Muhlenberg"                                           
+ [78] "National Public Affairs"                              
+ [79] "National Research"                                    
+ [80] "Navigator"                                            
+ [81] "Noble Predictive Insights"                            
+ [82] "North Star Opinion Research"                          
+ [83] "OnMessage Inc."                                       
+ [84] "Pan Atlantic Research"                                
+ [85] "Patriot Polling"                                      
+ [86] "Peak Insights"                                        
+ [87] "PPIC"                                                 
+ [88] "PPP"                                                  
+ [89] "Praecones Analytica"                                  
+ [90] "Public Opinion Strategies"                            
+ [91] "Quantus Insights"                                     
+ [92] "Quantus Polls and News"                               
+ [93] "Quinnipiac"                                           
+ [94] "RABA Research"                                        
+ [95] "Redfield & Wilton Strategies"                         
+ [96] "Remington"                                            
+ [97] "Research & Polling"                                   
+ [98] "Research America"                                     
+ [99] "Research Co."                                         
+[100] "RG Strategies"                                        
+[101] "RMG Research"                                         
+[102] "Roanoke College"                                      
+[103] "Rutgers-Eagleton"                                     
+[104] "Selzer"                                               
+[105] "Siena"                                                
+[106] "Siena/NYT"                                            
+[107] "Slingshot Strategies"                                 
+[108] "SoCal Research"                                       
+[109] "SoCal Strategies"                                     
+[110] "SoonerPoll.com"                                       
+[111] "Spry Strategies"                                      
+[112] "St. Anselm"                                           
+[113] "St. Pete Polls"                                       
+[114] "Stetson University Center for Public Opinion Research"
+[115] "Strategies 360"                                       
+[116] "Suffolk"                                              
+[117] "SurveyUSA"                                            
+[118] "SurveyUSA/High Point University"                      
+[119] "Susquehanna"                                          
+[120] "Targoz Market Research"                               
+[121] "Tarrance"                                             
+[122] "Texas Hispanic Policy Foundation"                     
+[123] "The Citadel"                                          
+[124] "The Washington Post"                                  
+[125] "TIPP"                                                 
+[126] "Torchlight Strategies"                                
+[127] "Trafalgar Group"                                      
+[128] "U. Arizona/TrueDot"                                   
+[129] "U. Georgia SPIA"                                      
+[130] "U. Houston"                                           
+[131] "U. New Hampshire"                                     
+[132] "U. North Florida"                                     
+[133] "U. Rhode Island"                                      
+[134] "UC Berkeley"                                          
+[135] "UMass Amherst/YouGov"                                 
+[136] "UMBC"                                                 
+[137] "University of Akron"                                  
+[138] "University of Delaware"                               
+[139] "University of Houston/Texas Southern University"      
+[140] "University of Maryland/Washington Post"               
+[141] "University of Massachusetts Lowell/YouGov"            
+[142] "University of Texas at Tyler"                         
+[143] "University of Wyoming"                                
+[144] "USC Dornsife/CSU Long Beach/Cal Poly Pomona"          
+[145] "Victory Insights"                                     
+[146] "Virginia Commonwealth U."                             
+[147] "Washington Post/George Mason University"              
+[148] "Wick"                                                 
+[149] "Winthrop U."                                          
+[150] "WPAi"                                                 
+[151] "YouGov"                                               
+[152] "YouGov Blue"                                          
+[153] "YouGov/Center for Working Class Politics"             
+[154] "Z to A Research"                                      
 [1] "Number of valid polls for each state:\n"
    states n_polls
 1      AL       0
 2      AK       5
-3      AZ      82
+3      AZ      94
 4      AR       1
-5      CA      18
-6      CO       4
+5      CA      20
+6      CO       6
 7      CT       1
 8      DE       2
-9      FL      43
-10     GA      76
+9      FL      46
+10     GA      87
 11     HI       0
 12     ID       0
 13     IL       3
 14     IN       5
-15     IA       2
+15     IA       4
 16     KS       1
 17     KY       0
 18     LA       0
-19     ME       4
-20     MD      12
-21     MA       6
-22     MI      95
-23     MN      20
+19     ME       5
+20     MD      15
+21     MA       8
+22     MI     109
+23     MN      22
 24     MS       0
-25     MO       7
+25     MO       8
 26     MT       9
-27     NE      10
-28     NV      59
-29     NH      14
+27     NE      11
+28     NV      68
+29     NH      16
 30     NJ       4
-31     NM       9
+31     NM      10
 32     NY      10
-33     NC      84
+33     NC      94
 34     ND       2
-35     OH      20
+35     OH      23
 36     OK       4
 37     OR       2
-38     PA     120
+38     PA     137
 39     RI       4
-40     SC       4
+40     SC       6
 41     SD       2
 42     TN       4
-43     TX      30
-44     UT       4
+43     TX      31
+44     UT       6
 45     VT       1
-46     VA      20
+46     VA      23
 47     WA       9
 48     DC       0
 49     WV       1
-50     WI      89
-51     WY       0
+50     WI     101
+51     WY       2
 > source(paste(path,"/load_prior.R",sep=""))
 [1] "Loading historical election data to generate priors"
 > 
@@ -293,9 +303,9 @@ Compiling model graph
    Resolving undeclared variables
    Allocating nodes
 Graph information:
-   Observed stochastic nodes: 952
-   Unobserved stochastic nodes: 196
-   Total graph size: 8522
+   Observed stochastic nodes: 1122
+   Unobserved stochastic nodes: 206
+   Total graph size: 9648
 
 Initializing model
 
@@ -337,13 +347,13 @@ Sampling final MCMC chain...
 > 
 > source(paste(path,"/plot_results.R",sep=""))
 Plotting results:
-Posterior mean for National vote proportion to Harris:  51.64862 % 
-Posterior mean for National vote spread (D):  3.297248 % 
-Average confidence interval length:  0.06166319 
+Posterior mean for National vote proportion to Harris:  51.5149 % 
+Posterior mean for National vote spread (D):  3.029807 % 
+Average confidence interval length:  0.06373213 
 Posterior Mode Harris Electoral Votes: 276 
-P(Harris Win) =  0.7851333 
-Closest State: NC 
+P(Harris Win) =  0.7274 
+Closest State: NV 
 > 
 > proc.time()
    user  system elapsed 
- 85.655   5.551  92.294 
+ 96.357   5.581 104.796 
